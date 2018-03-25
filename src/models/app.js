@@ -49,8 +49,7 @@ export default {
 
       let { location } = history
       if (location.pathname.indexOf('login') === -1 && location.pathname.indexOf('register') === -1) {
-        // dispatch({ type: 'query' })
-        console.log(22)
+        dispatch({ type: 'query' })
       }
     },
 

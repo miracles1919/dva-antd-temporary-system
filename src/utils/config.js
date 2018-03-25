@@ -2,7 +2,7 @@ const APIV1 = '/api/v1'
 const APIV2 = '/api/v2'
 
 module.exports = {
-  name: 'FanFan',
+  name: '农商系统',
   prefix: 'fanfan',
   footerText: 'Ant Design Admin  © 2017 beichoo',
   logo: '/logo.png',

@@ -30,6 +30,17 @@ const Routers = function ({ history, app }) {
       path: '/register',
       models: () => [import('./models/login')],
       component: () => import('./routes/register/'),
+    }, {
+      path: '/review',
+      component: () => import('./routes/review/'),
+    }, {
+      path: '/add',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/Add'),
+    }, {
+      path: '/list',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/List'),
     },
   ]
 

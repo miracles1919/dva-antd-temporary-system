@@ -15,9 +15,25 @@ const menuTree = [{
     route: '/basicInfo',
   }],
 }, {
-  title: '简历核实',
+  title: '审核注册',
   key: '2',
-  route: '/resume',
+  route: '/review',
+}, {
+  title: '商品',
+  key: '3',
+  children: [{
+    title: '上架',
+    key: '3-1',
+    mpid: '3',
+    bpid: '3',
+    route: '/add',
+  }, {
+    title: '列表',
+    key: '3-2',
+    mpid: '3',
+    bpid: '3',
+    route: '/list',
+  }],
 },
 //   {
 //   title: '消息推送',
