@@ -33,6 +33,12 @@ const menuTree = [{
     mpid: '3',
     bpid: '3',
     route: '/list',
+  }, {
+    title: '列表',
+    key: '3-3',
+    mpid: '3',
+    bpid: '3',
+    route: '/list2',
   }],
 },
 //   {
