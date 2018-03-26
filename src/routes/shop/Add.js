@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Input, Cascader, Form, Button, Upload, Icon, DatePicker } from 'antd'
+import { Input, Cascader, Form, Button, Upload, Icon, DatePicker, InputNumber } from 'antd'
 import city from 'utils/city'
 import { connect } from 'dva'
 
@@ -29,22 +29,6 @@ const Add = ({
   const formItemLayout = {
     labelCol: { span: 6, offset: 0 },
     wrapperCol: { span: 14, offset: 0 },
-  }
-
-  const checkNum = (rule, value, callback) => {
-    if (value > 0 || !value) {
-      callback()
-      return
-    }
-    callback('请输入正确的数量')
-  }
-
-  const checkPrice = (rule, value, callback) => {
-    if (value > 0 || !value) {
-      callback()
-      return
-    }
-    callback('请输入正确的价格')
   }
 
   const onSubmit = (e) => {
@@ -77,7 +61,7 @@ const Add = ({
                     message: '必填',
                   }],
                 })(
-                  <Input placeholder="请输入商品名称" style={{ width: '185px' }} />
+                  <Input placeholder="请输入商品名称" style={{ width: '100%' }} />
                 )
               }
             </FormItem>
@@ -117,7 +101,7 @@ const Add = ({
                     message: '请选择时间',
                   }],
                 })(
-                  <DatePicker />
+                  <DatePicker style={{ width: '100%' }} />
                 )
               }
             </FormItem>
@@ -133,11 +117,9 @@ const Add = ({
                   rules: [{
                     required: true,
                     message: '必填',
-                  }, {
-                    validator: checkNum,
                   }],
                 })(
-                  <Input />
+                  <InputNumber min={1} style={{ width: '100%' }} />
                 )
               }
             </FormItem>
@@ -152,11 +134,9 @@ const Add = ({
                   rules: [{
                     required: true,
                     message: '必填',
-                  }, {
-                    validator: checkPrice,
                   }],
                 })(
-                  <Input />
+                  <InputNumber min={1} style={{ width: '100%' }} />
                 )
               }
             </FormItem>
