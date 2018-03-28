@@ -47,6 +47,7 @@ const UserList = ({
           options={city}
           size="large"
           placeholder="请选择地区"
+          changeOnSelect
         />
       </div>
       <Table

@@ -21,7 +21,10 @@ const Login = ({
       if (errors) {
         return
       }
-      console.log(values)
+      dispatch({
+        type: 'login/login',
+        payload: values,
+      })
     })
   }
 

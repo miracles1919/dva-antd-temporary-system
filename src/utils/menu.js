@@ -2,17 +2,11 @@ const menuTree = [{
   title: '系统设置',
   key: '1',
   children: [{
-    title: '权限管理',
+    title: '修改密码',
     key: '1-1',
     mpid: '1',
     bpid: '1',
-    route: '/authority',
-  }, {
-    title: '基础信息',
-    key: '1-2',
-    mpid: '1',
-    bpid: '1',
-    route: '/basicInfo',
+    route: '/modify',
   }],
 }, {
   title: '审核注册',

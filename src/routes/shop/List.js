@@ -68,6 +68,7 @@ const AddressCell = ({ editable, value, onChange }) => {
             value={value}
             options={city}
             onChange={val => onChange(val)}
+            changeOnSelect
           />
           : value.join('／')
       }

@@ -13,15 +13,9 @@ const Routers = function ({ history, app }) {
   })
   const routes = [
     {
-      path: '/authority',
-      component: () => import('./routes/setting/authority/'),
-    }, {
-      path: '/basicInfo',
-      component: () => import('./routes/setting/basicInfo/'),
-    }, {
-      path: '/user/:id',
-      models: () => [import('./models/user/detail')],
-      component: () => import('./routes/user/detail/'),
+      path: '/modify',
+      models: () => [import('./models/login')],
+      component: () => import('./routes/setting/modify/'),
     }, {
       path: '/login',
       models: () => [import('./models/login')],

@@ -8,6 +8,7 @@ export default {
   state: {
     register: 'shop',
     confirmDirty: false,
+    modifyDirty: false,
   },
 
   effects: {
@@ -39,6 +40,10 @@ export default {
       const { register } = yield select(_ => _.login)
       console.log(payload)
       // yield put(routerRedux.push('/register'))
+    },
+
+    * modify ({ payload }, {}) {
+      console.log(payload)
     },
 
   },
