@@ -63,7 +63,8 @@
     "no-trailing-spaces": 0,
     "no-bitwise": 0,
     "radix": ["error", "as-needed"],
-    "arrow-parens": 0
+    "arrow-parens": 0,
+    "no-shadow": 0
   },
   "parser": "babel-eslint",
   "parserOptions": {
