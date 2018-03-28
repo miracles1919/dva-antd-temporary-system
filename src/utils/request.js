@@ -1,6 +1,6 @@
 /* global window */
 import axios from 'axios'
-// import qs from 'qs'
+import qs from 'qs'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
@@ -30,7 +30,7 @@ const fetch = (options) => {
     }
     url = domin + url
   } catch (e) {
-    message.error(e.message)
+    // message.error(e.message)
   }
 
   switch (method.toLowerCase()) {
@@ -43,7 +43,7 @@ const fetch = (options) => {
         data: cloneData,
       })
     case 'post':
-      return axios.post(url, cloneData)
+      return axios.post(url, qs.stringify(cloneData))
     case 'put':
       return axios.put(url, cloneData)
     case 'patch':
@@ -69,23 +69,20 @@ const request = (options) => {
   }
 
   return fetch(options).then((response) => {
-    const { statusText, status } = response
-    const { code, data, error_msg } = response.data
-    if (code === 0) {
+    const { status } = response
+    const { success, result, message } = response.data
+    if (success) {
       return Promise.resolve({
-        success: true,
-        message: statusText,
+        success,
         statusCode: status,
-        data,
+        data: result,
       })
-    } else if (code === -3) {
-      location.hash = '/login'
     }
 
     return Promise.reject({
       success: false,
       statusCode: status,
-      message: error_msg,
+      message,
     })
   }).catch((error) => {
     const { response } = error
