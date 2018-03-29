@@ -17,6 +17,8 @@ module.exports = {
   API,
   api: {
     login: `${API}/adminlogin`,
+    sellerLogin: `${API}/sellerlogin`,
+    // login: `${API}/adminlogin`,
     register: `${API}/userregister`,
     sellRegister: `${API}/sellregister`,
     upload: `${API}/imgUpload`,

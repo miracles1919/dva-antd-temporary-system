@@ -5,10 +5,9 @@ import { routerRedux } from 'dva/router'
 import config from 'config'
 import { getInfomation } from 'services/login'
 import queryString from 'query-string'
-import { menu } from 'utils'
+import { menuKeyList } from 'utils'
 
 const { prefix } = config
-const menuList = menu
 
 export default {
   namespace: 'app',
@@ -56,16 +55,29 @@ export default {
   },
   effects: {
 
-    * query ({
-      payload,
-    }, { call, put, select }) {
-      let permission = menuList.map(item => item.key)
-      let menuFilter = menuList
+    * query (_, { put }) {
+      // 登录类型
+      let type = localStorage.getItem('type')
+
+      let authority
+      if (type === 'admin') {
+        authority = ['2']
+      }
+
+      const menu = menuKeyList.filter((item) => {
+        const cases = [
+          authority.includes(item.key),
+          item.mpid ? authority.includes(item.mpid) || item.mpid === '-1' : true,
+          item.bpid ? authority.includes(item.bpid) : true,
+        ]
+        return cases.every(_ => _)
+      })
+
       yield put({
         type: 'updateState',
         payload: {
-          authority: permission,
-          menu: menuFilter,
+          authority,
+          menu,
         },
       })
 

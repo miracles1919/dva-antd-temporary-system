@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router'
-import { handleLogin, userRegister, shopRegister } from 'services/login'
+import { adminLogin, shopLogin, userRegister, shopRegister } from 'services/login'
 import { message } from 'antd'
 
 export default {
@@ -21,7 +21,21 @@ export default {
       let result
       console.log(loginType)
       if (loginType === 'admin') {
-        result = yield call(handleLogin, payload)
+        result = yield call(adminLogin, payload)
+      } else if (loginType === 'shop') {
+        result = yield call(shopLogin, payload)
+      }
+
+      if (result.success) {
+        switch (loginType) {
+          case 'admin':
+            localStorage.setItem('type', loginType)
+            yield put(routerRedux.push('/review'))
+            break
+          default:
+            console.log()
+        }
+        yield put({ type: 'app/query' })
       }
     },
 

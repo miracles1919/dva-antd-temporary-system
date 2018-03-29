@@ -2,11 +2,27 @@ import { request, config } from 'utils'
 import { fetchUpload } from 'utils/request'
 
 const { api } = config
-const { login, register, upload, sellRegister } = api
+const { login, sellerLogin, register, upload, sellRegister } = api
 
-export function handleLogin (data) {
+export function adminLogin (data) {
   return request({
     url: login,
+    method: 'post',
+    data,
+  })
+}
+
+export function userLogin (data) {
+  return request({
+    url: sellerLogin,
+    method: 'post',
+    data,
+  })
+}
+
+export function shopLogin (data) {
+  return request({
+    url: sellerLogin,
     method: 'post',
     data,
   })
