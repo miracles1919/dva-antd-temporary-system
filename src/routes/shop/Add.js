@@ -21,7 +21,7 @@ const Add = ({
   form,
   dispatch,
   shop: {
-    addImg,
+    fileList,
   },
 }) => {
   const { getFieldDecorator } = form
@@ -40,9 +40,13 @@ const Add = ({
       if (err) {
         return
       }
-
-      console.log(fieldsValue)
+      dispatch({ type: 'shop/shelves', payload: fieldsValue })
     })
+  }
+
+  const uploadImg = ({ file }) => {
+    console.log(file)
+    dispatch({ type: 'shop/upload', payload: { file } })
   }
 
   return (
@@ -55,7 +59,7 @@ const Add = ({
               label="商品名称"
             >
               {
-                getFieldDecorator('shopName', {
+                getFieldDecorator('name', {
                   rules: [{
                     required: true,
                     message: '必填',
@@ -146,23 +150,22 @@ const Add = ({
               {...formItemLayout}
               label="图片"
             >
-              {
-                getFieldDecorator('img', {
-                  rules: [{
-                    required: true,
-                    message: '请选择图片',
-                  }],
-                })(
-                  <Upload
-                    listType="picture-card"
-                    showUploadList={false}
-                  >
-                    {
-                      addImg ? '' : <UploadButton />
-                    }
-                  </Upload>
-                )
-              }
+              {getFieldDecorator('img', {
+                rules: [{
+                  required: true,
+                  message: '请选择图片',
+                }],
+              })(
+                <Upload
+                  listType="picture-card"
+                  customRequest={uploadImg}
+                  fileList={fileList}
+                >
+                  {fileList.length > 0 ? null
+                    : <UploadButton />
+                  }
+                </Upload>
+              )}
             </FormItem>
           </li>
         </ul>

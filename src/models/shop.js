@@ -1,21 +1,103 @@
 import modelExtend from 'dva-model-extend'
-
+import { imgUpload } from 'services/app'
+import { shelves, list, del, update } from 'services/shop'
+import { message } from 'antd'
 import { model } from './common'
 
 export default modelExtend(model, {
   namespace: 'shop',
 
   state: {
-    addImg: '',
-    shopList: [{
-      name: 'iphone8', img: 'iphone81', key: '1', price: '8888', number: 12, time: '2018-03-04', address: ['浙江省', '杭州市'], editable: false,
-    }],
-    cacheList: [{
-      name: 'iphone8', img: 'iphone81', key: '1', price: '8888', number: 12, time: '2018-03-04', address: ['浙江省', '杭州市'], editable: false,
-    }],
+    fileList: [],
+    shopList: [],
+    cacheList: [],
+  },
+
+  subscriptions: {
+    setup ({ dispatch, history: { location } }) {
+      if (location.pathname === '/list') {
+        dispatch({ type: 'list' })
+        console.log('list')
+      }
+    },
   },
 
   effects: {
+    * upload ({ payload: { file } }, { call, put }) {
+      let formData = new FormData()
+      formData.append('multipartFile', file)
+      const { status, data } = yield call(imgUpload, formData)
+      if (status === 200) {
+        let fileList = []
+        file.status = 'done'
+        file.url = `http://${data}`
+        fileList.push(file)
+        yield put({
+          type: 'updateState',
+          payload: { fileList },
+        })
+      }
+    },
+
+    * shelves ({
+      payload: { name, location, time, number, price },
+    }, { put, call, select }) {
+      const { fileList } = yield select(_ => _.shop)
+      const id = localStorage.getItem('id')
+      const params = {
+        name,
+        number,
+        price,
+        address: location.join('/'),
+        prodImg: fileList[0].url,
+        userId: id,
+      }
+      const { success } = yield call(shelves, params)
+      if (success) {
+        message.success('上架成功')
+      }
+    },
+
+    * list (_, { call, put }) {
+      let type = localStorage.getItem('type')
+      let params = {}
+      if (type === 'shop') {
+        let id = localStorage.getItem('id')
+        params.userId = id
+      }
+      const { success, data } = yield call(list, params)
+      if (success) {
+        data.forEach(item => { item.key = item.id })
+        yield put({
+          type: 'updateState',
+          payload: { shopList: data, cacheList: data },
+        })
+      }
+    },
+
+    * del ({ payload }, { call, put }) {
+      let id = localStorage.getItem('id')
+      payload.userId = id
+      const { success } = yield call(del, payload)
+      if (success) {
+        message.success('删除成功')
+        yield put({ type: 'list' })
+      }
+    },
+
+    * update ({ payload: { key } }, { call, select }) {
+      const { shopList } = yield select(_ => _.shop)
+      const target = shopList.filter(item => key === item.key)[0]
+      if (target) {
+        let id = localStorage.getItem('id')
+        let params = { ...target, userId: id, produId: target.id }
+        const { success } = yield call(update, params)
+        if (success) {
+          target.editable = false
+          message.success('修改成功')
+        }
+      }
+    },
 
   },
 

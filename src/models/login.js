@@ -19,7 +19,6 @@ export default {
     }, { put, call, select }) {
       const { loginType } = yield select(_ => _.login)
       let result
-      console.log(loginType)
       if (loginType === 'admin') {
         result = yield call(adminLogin, payload)
       } else if (loginType === 'shop') {
@@ -32,6 +31,7 @@ export default {
             yield put(routerRedux.push('/review'))
             break
           case 'shop':
+            localStorage.setItem('id', result.data.id)
             yield put(routerRedux.push('/list'))
             break
           default:

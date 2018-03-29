@@ -1,20 +1,13 @@
-import { request, config, requestMock } from 'utils'
+import { config } from 'utils'
+import { fetchUpload } from 'utils/request'
 
 const { api } = config
-const { user, userLogin } = api
+const { upload } = api
 
-export async function login (params) {
-  return request({
-    url: userLogin,
-    method: 'post',
-    data: params,
-  })
-}
-
-export async function query (params) {
-  return requestMock({
-    url: user.replace('/:id', ''),
-    method: 'get',
-    data: params,
+export function imgUpload (formData) {
+  console.log(upload)
+  return fetchUpload({
+    url: upload,
+    data: formData,
   })
 }

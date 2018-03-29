@@ -59,18 +59,17 @@ TimeCell.propTypes = {
 }
 
 const AddressCell = ({ editable, value, onChange }) => {
-  console.log(value)
   return (
     <div>
       {
         editable
           ? <Cascader
-            value={value}
+            // value={value.split('/')}
             options={city}
             onChange={val => onChange(val)}
             changeOnSelect
           />
-          : value.join('／')
+          : value
       }
     </div>
   )
@@ -78,7 +77,7 @@ const AddressCell = ({ editable, value, onChange }) => {
 
 AddressCell.propTypes = {
   editable: PropTypes.bool,
-  value: PropTypes.array,
+  value: PropTypes.string,
   onChange: PropTypes.func,
 }
 
@@ -94,8 +93,8 @@ const BtnCell = ({ editable, edit, save, off, cancel }) => {
           :
           <div>
             <Button onClick={edit}>编辑</Button>
-            <Popconfirm title="确定要下架？" onConfirm={off}>
-              <Button>下架</Button>
+            <Popconfirm title="确定要删除？" onConfirm={off}>
+              <Button>删除</Button>
             </Popconfirm>
           </div>
       }
@@ -165,7 +164,7 @@ const List = ({
       <AddressCell
         editable={record.editable}
         value={text}
-        onChange={value => handleChange(value, record.key, column)}
+        onChange={value => handleChange(value.join('/'), record.key, column)}
       />
     )
   }
@@ -183,23 +182,11 @@ const List = ({
   }
 
   const save = key => {
-    const newData = [...shopList]
-    const target = newData.filter(item => key === item.key)[0]
-    if (target) {
-      target.editable = false
-      dispatch({
-        type: 'shop/updateState',
-        payload: { shopList: newData },
-      })
-    }
+    dispatch({ type: 'shop/update', payload: { key } })
   }
 
   const off = key => {
-    const newData = shopList.filter(item => key !== item.key)
-    dispatch({
-      type: 'shop/updateState',
-      payload: { shopList: newData },
-    })
+    dispatch({ type: 'shop/del', payload: { produId: key } })
   }
 
   const cancel = key => {
@@ -223,8 +210,9 @@ const List = ({
     render: (text, record) => renderColumns(text, record, 'name'),
   }, {
     title: '照片',
-    dataIndex: 'img',
-    key: 'img',
+    dataIndex: 'prodImg',
+    key: 'prodImg',
+    render: (url) => <img src={url} alt="img" width={80} />,
   }, {
     title: '出产时间',
     dataIndex: 'time',

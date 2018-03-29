@@ -1,8 +1,7 @@
 import { request, config } from 'utils'
-import { fetchUpload } from 'utils/request'
 
 const { api } = config
-const { login, sellerLogin, register, upload, sellRegister } = api
+const { login, sellerLogin, register, sellRegister } = api
 
 export function adminLogin (data) {
   return request({
@@ -41,12 +40,5 @@ export function shopRegister (data) {
     url: sellRegister,
     method: 'post',
     data,
-  })
-}
-
-export function imgUpload (formData) {
-  return fetchUpload({
-    url: upload,
-    data: formData,
   })
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Upload, Icon, Modal } from 'antd'
-import { imgUpload } from 'services/login'
+import { imgUpload } from 'services/app'
 import styles from './index.less'
 
 class PicturesWall extends React.Component {
@@ -38,7 +38,6 @@ class PicturesWall extends React.Component {
     const { previewVisible, previewImage } = this.state
     const { fileList } = this.props
 
-    console.log(fileList)
     const uploadButton = (
       <div>
         <Icon type="plus" />
