@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Button, Row, Col, Form, Input } from 'antd'
-import { config } from 'utils'
+import { Button, Row, Col, Form, Input, Tabs } from 'antd'
 import styles from './index.less'
 
 const FormItem = Form.Item
 const InputGroup = Input.Group
+const { TabPane } = Tabs
 
 const Login = ({
   loading,
@@ -32,10 +32,19 @@ const Login = ({
     dispatch({ type: 'login/loop', payload: { register: type } })
   }
 
+  const changeType = (key) => {
+    dispatch({ type: 'login/updateState', payload: { loginType: key } })
+  }
+
   return (
     <div className={styles.form}>
       <div className={styles.logo}>
-        <img alt={'logo'} src={config.logo} />
+        {/* <img alt={'logo'} src={config.logo} /> */}
+        <Tabs type="card" onChange={changeType}>
+          <TabPane tab="商家" key="shop" />
+          <TabPane tab="用户" key="user" />
+          <TabPane tab="管理员" key="admin" />
+        </Tabs>
       </div>
       <form>
         <FormItem>
@@ -63,16 +72,12 @@ const Login = ({
             })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="Password" />)}
           </InputGroup>
         </FormItem>
-        <Row style={{ marginBottom: '10px' }}>
+        <Row style={{ marginBottom: '20px' }}>
           <Button type="primary" size="large" onClick={handleOk} loading={loading.effects.login}>
             登录
           </Button>
         </Row>
-        <Row type="flex">
-          <Col span={12}><Button size="large" onClick={loop.bind(this, 'shop')}>商家注册</Button></Col>
-          <Col span={12}><Button size="large" onClick={loop.bind(this, 'user')}>买家注册</Button></Col>
-        </Row>
-
+        <div className={styles.loop}><span onClick={loop.bind(this, 'shop')}>商家注册</span>/<span onClick={loop.bind(this, 'user')}>买家注册</span></div>
       </form>
     </div>
   )

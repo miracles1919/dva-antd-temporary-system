@@ -1,23 +1,24 @@
-const APIV1 = '/api/v1'
-const APIV2 = '/api/v2'
+const API = 'http://localhost:8088/productManage'
 
 module.exports = {
   name: '农商系统',
-  prefix: 'fanfan',
-  footerText: 'Ant Design Admin  © 2017 beichoo',
-  logo: '/logo.png',
+  // prefix: 'fanfan',
+  footerText: 'Ant Design Admin  © 2018 农商系统',
+  // logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  CORS: ['https://api-dev.beichoo.com'],
+  CORS: ['http://localhost:8088'],
   openPages: ['/login', '/register'],
   apiPrefix: '/api/v1',
   cookieName: {
     uid: 'new_platform_uid',
     token: 'new_platform_token',
   },
-  APIV1,
-  APIV2,
+  API,
   api: {
-
+    login: `${API}/adminlogin`,
+    register: `${API}/userregister`,
+    sellRegister: `${API}/sellregister`,
+    upload: `${API}/imgUpload`,
   },
 }

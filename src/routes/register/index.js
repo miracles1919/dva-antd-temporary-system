@@ -19,6 +19,7 @@ const Register = ({
   login: {
     register,
     confirmDirty,
+    fileList,
   },
 }) => {
   const handleOk = () => {
@@ -26,6 +27,7 @@ const Register = ({
       if (errors) {
         return
       }
+      console.log(values)
       dispatch({
         type: 'login/register',
         payload: values,
@@ -56,7 +58,7 @@ const Register = ({
     })
   }
 
-  const wrapStyle = register === 'user' ? { height: '320px' } : { height: '446px', marginTop: '-223px' }
+  const wrapStyle = register === 'user' ? null : { height: '502px', marginTop: '-240px' }
 
   return (
     <div className={styles.form} style={wrapStyle}>
@@ -71,6 +73,14 @@ const Register = ({
               message: '请输入账号',
             }],
           })(<Input size="large" onPressEnter={handleOk} placeholder="请输入账号" />)}
+        </FormItem>
+        <FormItem>
+          {getFieldDecorator('username', {
+            rules: [{
+              required: true,
+              message: '请输入用户名',
+            }],
+          })(<Input size="large" onPressEnter={handleOk} placeholder="请输入用户名" />)}
         </FormItem>
         <FormItem>
           <InputGroup>
@@ -114,8 +124,8 @@ const Register = ({
         {
           register === 'shop' ?
             <div>
-              <p className={styles.tip}>请依次上传身份证</p>
-              <PicturesWall />
+              <p className={styles.tip}>请依次上传认证照片</p>
+              <PicturesWall dispatch={dispatch} fileList={fileList} />
             </div> : null
         }
         <Row style={{ marginTop: '10px' }}>

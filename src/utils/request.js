@@ -53,6 +53,19 @@ const fetch = (options) => {
   }
 }
 
+const fetchUpload = (options) => {
+  let {
+    data,
+    url,
+  } = options
+
+  return axios.post(url, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}
+
 const request = (options) => {
   if (options.url && options.url.indexOf('//') > -1) {
     const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`
@@ -140,4 +153,5 @@ const requestMock = (options) => {
 module.exports = {
   request,
   requestMock,
+  fetchUpload,
 }

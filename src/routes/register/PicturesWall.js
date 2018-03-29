@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Upload, Icon, Modal } from 'antd'
+import { imgUpload } from 'services/login'
 import styles from './index.less'
 
-export default class PicturesWall extends React.Component {
+class PicturesWall extends React.Component {
   state = {
     previewVisible: false,
     previewImage: '',
-    fileList: [],
-  };
+  }
 
   handleCancel = () => this.setState({ previewVisible: false })
 
@@ -18,13 +19,26 @@ export default class PicturesWall extends React.Component {
     })
   }
 
-  handleChange = ({ fileList }) => {
-    console.log(fileList)
-    this.setState({ fileList })
+  upload = ({ file }) => {
+    let formData = new FormData()
+    let { dispatch } = this.props
+    formData.append('multipartFile', file)
+    imgUpload(formData).then(({ status, data }) => {
+      if (status === 200) {
+        let fileList = [...this.props.fileList]
+        file.status = 'done'
+        file.url = `http://${data}`
+        fileList.push(file)
+        dispatch({ type: 'login/updateState', payload: { fileList } })
+      }
+    })
   }
 
   render () {
-    const { previewVisible, previewImage, fileList } = this.state
+    const { previewVisible, previewImage } = this.state
+    const { fileList } = this.props
+
+    console.log(fileList)
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -34,11 +48,10 @@ export default class PicturesWall extends React.Component {
     return (
       <div className={styles.upload}>
         <Upload
-          // action="//jsonplaceholder.typicode.com/posts/"
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
-          onChange={this.handleChange}
+          customRequest={this.upload}
         >
           {fileList.length >= 3 ? null : uploadButton}
         </Upload>
@@ -49,3 +62,10 @@ export default class PicturesWall extends React.Component {
     )
   }
 }
+
+PicturesWall.propTypes = {
+  dispatch: PropTypes.func,
+  fileList: PropTypes.array,
+}
+
+export default PicturesWall
