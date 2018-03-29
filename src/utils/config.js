@@ -22,5 +22,6 @@ module.exports = {
     register: `${API}/userregister`,
     sellRegister: `${API}/sellregister`,
     upload: `${API}/imgUpload`,
+    checkSeller: `${API}/checkSeller`,
   },
 }

@@ -29,12 +29,15 @@ export default {
       if (result.success) {
         switch (loginType) {
           case 'admin':
-            localStorage.setItem('type', loginType)
             yield put(routerRedux.push('/review'))
             break
+          case 'shop':
+            yield put(routerRedux.push('/list'))
+            break
           default:
-            console.log()
+            break
         }
+        localStorage.setItem('type', loginType)
         yield put({ type: 'app/query' })
       }
     },

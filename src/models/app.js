@@ -3,7 +3,6 @@
 /* global location */
 import { routerRedux } from 'dva/router'
 import config from 'config'
-import { getInfomation } from 'services/login'
 import queryString from 'query-string'
 import { menuKeyList } from 'utils'
 
@@ -62,6 +61,8 @@ export default {
       let authority
       if (type === 'admin') {
         authority = ['2']
+      } else if (type === 'shop') {
+        authority = ['1', '1-1', '3', '3-1', '3-2']
       }
 
       const menu = menuKeyList.filter((item) => {
