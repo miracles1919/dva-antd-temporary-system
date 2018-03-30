@@ -34,6 +34,7 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
           <Icon type={classnames({ 'menu-unfold': siderFold, 'menu-fold': !siderFold })} />
         </div>}
       <div className={styles.rightWarpper}>
+        {user.balance ? <span>账户余额：{user.balance}</span> : null}
         <Menu mode="horizontal" onClick={handleClickMenu}>
           <SubMenu
             style={{
@@ -44,8 +45,8 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
               {user.name}
             </span>}
           >
-            <Menu.Item key="logout">
-              退出
+            <Menu.Item key="logout" style={{ textAlign: 'center' }}>
+            退出
             </Menu.Item>
           </SubMenu>
         </Menu>

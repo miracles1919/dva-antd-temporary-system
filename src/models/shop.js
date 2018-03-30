@@ -99,6 +99,24 @@ export default modelExtend(model, {
       }
     },
 
+    * buy ({ payload: { id } }, { select, put }) {
+      const { shopList } = yield select(_ => _.shop)
+      const { user } = yield select(_ => _.app)
+      const target = shopList.filter(item => item.id === id)[0]
+      if (target) {
+        if (target.number === 0) {
+          message.error('商品数量不足')
+        } else if (target.price > user.balance) {
+          message.error('余额不足')
+        } else {
+          message.success('购买成功')
+          target.number -= 1
+          user.balance -= target.price
+          yield put({ type: 'app/updateState', payload: { user } })
+        }
+      }
+    },
+
   },
 
   reducers: {

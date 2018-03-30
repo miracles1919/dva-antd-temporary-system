@@ -44,6 +44,8 @@ export default {
         }
         localStorage.setItem('account', payload.account)
         localStorage.setItem('type', loginType)
+        localStorage.setItem('username', result.data.username)
+        localStorage.setItem('balance', result.data.accountBalance || false)
         yield put({ type: 'app/query' })
       }
     },
@@ -59,6 +61,7 @@ export default {
         const { success, data } = yield call(userRegister, payload)
         if (success) {
           localStorage.setItem('account', data.account)
+          localStorage.setItem('username', data.username)
           localStorage.setItem('id', data.id)
           localStorage.setItem('type', 'user')
           yield put(routerRedux.push('/list2'))
@@ -82,11 +85,6 @@ export default {
         }
       }
     },
-
-    // * modify ({ payload }, {}) {
-    //   console.log(payload)
-    // },
-
   },
 
   reducers: {

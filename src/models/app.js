@@ -57,6 +57,8 @@ export default {
     * query (_, { put }) {
       // 登录类型
       let type = localStorage.getItem('type')
+      let name = localStorage.getItem('username')
+      let balance = localStorage.getItem('balance')
 
       let authority
       if (type === 'admin') {
@@ -64,7 +66,6 @@ export default {
       } else if (type === 'shop') {
         authority = ['1', '1-1', '3', '3-1', '3-2']
       } else if (type === 'user') {
-        console.log(111)
         authority = ['1', '1-1', '3', '3-3']
       }
 
@@ -82,67 +83,9 @@ export default {
         payload: {
           authority,
           menu,
+          user: { name, balance },
         },
       })
-
-      // const { success, data } = yield call(getInfomation, payload)
-      // const { locationPathname, user } = yield select(_ => _.app)
-      // if (success && data.info) {
-      //   const { authority, name } = data.info
-      //   user.name = name
-      //   let menuFilter = menuList
-      //   let permission
-      //   if (authority[0] === 'admin') {
-      //     permission = menuList.map(item => item.key)
-      //   } else {
-      //     permission = authority
-      //     let parentNode = []
-      //     authority.forEach((item) => {
-      //       let arr = item.split('-')
-      //       if (arr.length === 2) {
-      //         parentNode.push(arr[0])
-      //       } else if (arr.length === 3) {
-      //         parentNode.push(`${arr[0]}-${arr[1]}`)
-      //       }
-      //     })
-      //
-      //     permission = permission.concat(Array.from(new Set(parentNode)))
-      //
-      //     menuFilter = menuList.filter((item) => {
-      //       const cases = [
-      //         permission.includes(item.key),
-      //         item.mpid ? permission.includes(item.mpid) || item.mpid === '-1' : true,
-      //         item.bpid ? permission.includes(item.bpid) : true,
-      //       ]
-      //       return cases.every(_ => _)
-      //     })
-      //   }
-      //   yield put({
-      //     type: 'updateState',
-      //     payload: {
-      //       user,
-      //       authority: permission,
-      //       menu: menuFilter,
-      //     },
-      //   })
-      //   if (location.hash.indexOf('#/login') !== -1) {
-      //     // 跳转
-      //     let pathname
-      //     for (let i = 0; i < menuFilter.length; i++) {
-      //       if (menuFilter[i].route) {
-      //         pathname = menuFilter[i].route
-      //         break
-      //       }
-      //     }
-      //     yield put(routerRedux.push({
-      //       pathname,
-      //     }))
-      //   }
-      // } else {
-      //   yield put(routerRedux.push({
-      //     pathname: '/login',
-      //   }))
-      // }
     },
 
     * logout (action, { put }) {

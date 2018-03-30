@@ -10,6 +10,10 @@ const userList = ({
   },
   dispatch,
 }) => {
+  const buy = (id) => {
+    dispatch({ type: 'shop/buy', payload: { id } })
+  }
+
   const columns = [{
     title: '商品名称',
     dataIndex: 'name',
@@ -38,8 +42,8 @@ const userList = ({
     key: 'number',
   }, {
     title: '操作',
-    render: () =>
-      <Popconfirm title="确定要购买？"><Button>购买</Button></Popconfirm>,
+    render: (text, record) =>
+      <Popconfirm title="确定要购买？" onConfirm={buy.bind(this, record.id)}><Button>购买</Button></Popconfirm>,
   }]
 
   const onChange = (list) => {
