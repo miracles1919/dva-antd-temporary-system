@@ -64,7 +64,7 @@ const AddressCell = ({ editable, value, onChange }) => {
       {
         editable
           ? <Cascader
-            // value={value.split('/')}
+            value={value.split('/')}
             options={city}
             onChange={val => onChange(val)}
             changeOnSelect
@@ -110,7 +110,7 @@ BtnCell.propTypes = {
   cancel: PropTypes.func,
 }
 
-const List = ({
+const list = ({
   shop: {
     shopList,
     cacheList,
@@ -215,9 +215,9 @@ const List = ({
     render: (url) => <img src={url} alt="img" width={80} />,
   }, {
     title: '出产时间',
-    dataIndex: 'time',
-    key: 'time',
-    render: (text, record) => renderTime(text, record, 'time'),
+    dataIndex: 'createTime',
+    key: 'createTime',
+    render: (text, record) => renderTime(text, record, 'createTime'),
   }, {
     title: '地址',
     dataIndex: 'address',
@@ -255,7 +255,27 @@ const List = ({
   )
 }
 
-List.propTypes = {
+const HOC = WrappedComponent => {
+  return class extends React.Component {
+    static propTypes = {
+      dispatch: PropTypes.func,
+    }
+
+    componentDidMount () {
+      this.props.dispatch({ type: 'shop/list' })
+    }
+
+    render () {
+      return (
+        <WrappedComponent {...this.props} />
+      )
+    }
+  }
+}
+
+const List = HOC(list)
+
+list.propTypes = {
   shop: PropTypes.object,
   dispatch: PropTypes.func,
 }

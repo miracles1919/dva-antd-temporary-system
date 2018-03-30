@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { imgUpload } from 'services/app'
-import { shelves, list, del, update } from 'services/shop'
+import { shelves, list, del, update, search } from 'services/shop'
 import { message } from 'antd'
 import { model } from './common'
 
@@ -11,15 +11,6 @@ export default modelExtend(model, {
     fileList: [],
     shopList: [],
     cacheList: [],
-  },
-
-  subscriptions: {
-    setup ({ dispatch, history: { location } }) {
-      if (location.pathname === '/list') {
-        dispatch({ type: 'list' })
-        console.log('list')
-      }
-    },
   },
 
   effects: {
@@ -40,8 +31,8 @@ export default modelExtend(model, {
     },
 
     * shelves ({
-      payload: { name, location, time, number, price },
-    }, { put, call, select }) {
+      payload: { name, location, number, price, createTime },
+    }, { call, select }) {
       const { fileList } = yield select(_ => _.shop)
       const id = localStorage.getItem('id')
       const params = {
@@ -51,6 +42,7 @@ export default modelExtend(model, {
         address: location.join('/'),
         prodImg: fileList[0].url,
         userId: id,
+        createTime: createTime.format('YYYY-MM-DD'),
       }
       const { success } = yield call(shelves, params)
       if (success) {
@@ -96,6 +88,14 @@ export default modelExtend(model, {
           target.editable = false
           message.success('修改成功')
         }
+      }
+    },
+
+    * search ({ payload }, { call, put }) {
+      const { success, data } = yield call(search, payload)
+      if (success) {
+        data.forEach(item => { item.key = item.id })
+        yield put({ type: 'updateState', payload: { shopList: data } })
       }
     },
 

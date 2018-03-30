@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { login, sellerLogin, register, sellRegister } = api
+const { adminlogin, sellerLogin, login, register, sellRegister } = api
 
 export function adminLogin (data) {
   return request({
-    url: login,
+    url: adminlogin,
     method: 'post',
     data,
   })
@@ -13,7 +13,7 @@ export function adminLogin (data) {
 
 export function userLogin (data) {
   return request({
-    url: sellerLogin,
+    url: login,
     method: 'post',
     data,
   })

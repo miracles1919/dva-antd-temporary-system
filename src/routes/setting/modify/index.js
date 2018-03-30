@@ -12,7 +12,7 @@ const Modify = ({
     getFieldValue,
     validateFields,
   },
-  login: {
+  setting: {
     modifyDirty,
   },
   dispatch,
@@ -26,7 +26,7 @@ const Modify = ({
       }
 
       dispatch({
-        type: 'login/modify',
+        type: 'setting/mod',
         payload: fieldsValue,
       })
     })
@@ -40,7 +40,7 @@ const Modify = ({
   }
 
   const compareToFirstPassword = (rule, value, callback) => {
-    if (value && value !== getFieldValue('password')) {
+    if (value && value !== getFieldValue('newPassword')) {
       callback('两次密码不一致！')
     } else {
       callback()
@@ -103,7 +103,7 @@ const Modify = ({
 Modify.propTypes = {
   form: PropTypes.object,
   dispatch: PropTypes.func,
-  login: PropTypes.object,
+  setting: PropTypes.object,
 }
 
-export default connect(({ login }) => ({ login }))(Form.create()(Modify))
+export default connect(({ setting }) => ({ setting }))(Form.create()(Modify))

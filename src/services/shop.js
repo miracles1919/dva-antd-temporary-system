@@ -1,7 +1,7 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { prodShelves, prodList, deleteProd, updateProd } = api
+const { prodShelves, prodList, deleteProd, updateProd, prodSearch } = api
 
 export function shelves (data) {
   return request({
@@ -31,6 +31,14 @@ export function update (data) {
   return request({
     url: updateProd,
     method: 'post',
+    data,
+  })
+}
+
+
+export function search (data) {
+  return request({
+    url: prodSearch,
     data,
   })
 }

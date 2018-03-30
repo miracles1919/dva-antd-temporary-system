@@ -63,6 +63,9 @@ export default {
         authority = ['2']
       } else if (type === 'shop') {
         authority = ['1', '1-1', '3', '3-1', '3-2']
+      } else if (type === 'user') {
+        console.log(111)
+        authority = ['1', '1-1', '3', '3-3']
       }
 
       const menu = menuKeyList.filter((item) => {

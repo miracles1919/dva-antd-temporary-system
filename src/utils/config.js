@@ -16,9 +16,9 @@ module.exports = {
   },
   API,
   api: {
-    login: `${API}/adminlogin`,
+    adminlogin: `${API}/adminlogin`,
     sellerLogin: `${API}/sellerlogin`,
-    // login: `${API}/adminlogin`,
+    login: `${API}/login`,
     register: `${API}/userregister`,
     sellRegister: `${API}/sellregister`,
     upload: `${API}/imgUpload`,
@@ -27,5 +27,9 @@ module.exports = {
     prodList: `${API}/prodList`,
     deleteProd: `${API}/deleteProd`,
     updateProd: `${API}/updateProd`,
+    sellerUpdate: `${API}/sellerUpdate`,
+    changepsw: `${API}/changepsw`,
+    unCheckList: `${API}/unCheckList`,
+    prodSearch: `${API}/prodSearch`,
   },
 }

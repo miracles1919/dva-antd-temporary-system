@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router'
-import { adminLogin, shopLogin, userRegister, shopRegister } from 'services/login'
+import { adminLogin, shopLogin, userLogin, userRegister, shopRegister } from 'services/login'
 import { message } from 'antd'
 
 export default {
@@ -9,7 +9,6 @@ export default {
     register: 'shop',
     loginType: 'shop',
     confirmDirty: false,
-    modifyDirty: false,
     fileList: [],
   },
 
@@ -23,6 +22,8 @@ export default {
         result = yield call(adminLogin, payload)
       } else if (loginType === 'shop') {
         result = yield call(shopLogin, payload)
+      } else if (loginType === 'user') {
+        result = yield call(userLogin, payload)
       }
 
       if (result.success) {
@@ -34,9 +35,14 @@ export default {
             localStorage.setItem('id', result.data.id)
             yield put(routerRedux.push('/list'))
             break
+          case 'user':
+            localStorage.setItem('id', result.data.id)
+            yield put(routerRedux.push('/list2'))
+            break
           default:
             break
         }
+        localStorage.setItem('account', payload.account)
         localStorage.setItem('type', loginType)
         yield put({ type: 'app/query' })
       }
@@ -50,8 +56,14 @@ export default {
     * register ({ payload }, { select, call, put }) {
       const { register, fileList } = yield select(_ => _.login)
       if (register === 'user') {
-        const { success } = yield call(userRegister, payload)
-        yield put(routerRedux.push('/list2'))
+        const { success, data } = yield call(userRegister, payload)
+        if (success) {
+          localStorage.setItem('account', data.account)
+          localStorage.setItem('id', data.id)
+          localStorage.setItem('type', 'user')
+          yield put(routerRedux.push('/list2'))
+          yield put({ type: 'app/query' })
+        }
       } else if (register === 'shop') {
         if (fileList.length === 3) {
           let params = {
@@ -63,6 +75,7 @@ export default {
           const { success } = yield call(shopRegister, params)
           if (success) {
             message.success('注册成功，请等待管理员审核')
+            yield put(routerRedux.push('/login'))
           }
         } else {
           message.fail('请上传三张图片')

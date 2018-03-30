@@ -45,7 +45,6 @@ const Add = ({
   }
 
   const uploadImg = ({ file }) => {
-    console.log(file)
     dispatch({ type: 'shop/upload', payload: { file } })
   }
 
@@ -99,7 +98,7 @@ const Add = ({
               label="出产时间"
             >
               {
-                getFieldDecorator('time', {
+                getFieldDecorator('createTime', {
                   rules: [{
                     required: true,
                     message: '请选择时间',

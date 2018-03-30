@@ -14,7 +14,7 @@ const Routers = function ({ history, app }) {
   const routes = [
     {
       path: '/modify',
-      models: () => [import('./models/login')],
+      models: () => [import('./models/setting')],
       component: () => import('./routes/setting/modify/'),
     }, {
       path: '/login',
@@ -26,6 +26,7 @@ const Routers = function ({ history, app }) {
       component: () => import('./routes/register/'),
     }, {
       path: '/review',
+      models: () => [import('./models/setting')],
       component: () => import('./routes/review/'),
     }, {
       path: '/add',
