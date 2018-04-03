@@ -8,12 +8,8 @@ module.exports = {
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   CORS: ['http://localhost:8088'],
-  openPages: ['/login', '/register'],
+  openPages: ['/login', '/register', '/'],
   apiPrefix: '/api/v1',
-  cookieName: {
-    uid: 'new_platform_uid',
-    token: 'new_platform_token',
-  },
   API,
   api: {
     adminlogin: `${API}/adminlogin`,

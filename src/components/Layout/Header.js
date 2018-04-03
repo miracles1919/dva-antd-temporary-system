@@ -34,7 +34,7 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
           <Icon type={classnames({ 'menu-unfold': siderFold, 'menu-fold': !siderFold })} />
         </div>}
       <div className={styles.rightWarpper}>
-        {user.balance ? <span>账户余额：{user.balance}</span> : null}
+        {user.balance !== 'false' ? <span>账户余额：{user.balance}</span> : null}
         <Menu mode="horizontal" onClick={handleClickMenu}>
           <SubMenu
             style={{

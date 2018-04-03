@@ -60,7 +60,7 @@ export default {
       let name = localStorage.getItem('username')
       let balance = localStorage.getItem('balance')
 
-      let authority
+      let authority = []
       if (type === 'admin') {
         authority = ['2']
       } else if (type === 'shop') {
@@ -89,6 +89,10 @@ export default {
     },
 
     * logout (action, { put }) {
+      localStorage.removeItem('account')
+      localStorage.removeItem('type')
+      localStorage.removeItem('username')
+      localStorage.removeItem('balance')
       yield put(routerRedux.push({
         pathname: '/login',
       }))

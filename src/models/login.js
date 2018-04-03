@@ -44,7 +44,7 @@ export default {
         }
         localStorage.setItem('account', payload.account)
         localStorage.setItem('type', loginType)
-        localStorage.setItem('username', result.data.username)
+        localStorage.setItem('username', result.data.username || result.data.name)
         localStorage.setItem('balance', result.data.accountBalance || false)
         yield put({ type: 'app/query' })
       }
