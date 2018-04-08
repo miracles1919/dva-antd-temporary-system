@@ -66,7 +66,7 @@ export default {
       } else if (type === 'shop') {
         authority = ['1', '1-1', '3', '3-1', '3-2']
       } else if (type === 'user') {
-        authority = ['1', '1-1', '3', '3-3']
+        authority = ['1', '1-1', '3', '3-3', '3-4', '3-5']
       }
 
       const menu = menuKeyList.filter((item) => {
@@ -149,6 +149,13 @@ export default {
       return {
         ...state,
         ...navOpenKeys,
+      }
+    },
+
+    updateBalance (state, { payload }) {
+      return {
+        ...state,
+        user: { ...state.user, ...payload },
       }
     },
   },
