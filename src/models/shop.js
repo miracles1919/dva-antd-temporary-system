@@ -62,7 +62,10 @@ export default modelExtend(model, {
         data.forEach(item => { item.key = item.id })
         yield put({
           type: 'updateState',
-          payload: { shopList: data, cacheList: data },
+          payload: {
+            shopList: data,
+            cacheList: data.map(item => ({ ...item })),
+          },
         })
       }
     },
@@ -95,7 +98,13 @@ export default modelExtend(model, {
       const { success, data } = yield call(search, payload)
       if (success) {
         data.forEach(item => { item.key = item.id })
-        yield put({ type: 'updateState', payload: { shopList: data } })
+        yield put({
+          type: 'updateState',
+          payload: {
+            shopList: data,
+            cacheList: data.map(item => ({ ...item })),
+          },
+        })
       }
     },
 
