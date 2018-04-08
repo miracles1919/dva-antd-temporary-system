@@ -1,14 +1,61 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Cascader, Popconfirm, Input, Form } from 'antd'
+import { Table, Button, Cascader, Popconfirm, Input, Form, InputNumber } from 'antd'
 import { connect } from 'dva'
 import city from 'utils/city'
 
 const FormItem = Form.Item
 
+const NumberCell = ({ editable, value, onChange, max }) => {
+  return (
+    <div>
+      {
+        editable
+          ? <InputNumber value={value} onChange={onChange} max={max} min={1} />
+          : value
+      }
+    </div>
+  )
+}
+
+NumberCell.propTypes = {
+  editable: PropTypes.bool,
+  value: PropTypes.number,
+  onChange: PropTypes.func,
+  max: PropTypes.number,
+}
+
+const BtnCell = ({ editable, buy, sure, add, cancel }) => {
+  return (
+    <div>
+      {
+        editable ?
+          <div>
+            <Button onClick={sure}>确定</Button>
+            <Button onClick={cancel} style={{ marginLeft: '10px' }}>取消</Button>
+          </div>
+          :
+          <div>
+            <Popconfirm title="确定要购买？" onConfirm={buy}><Button>购买</Button></Popconfirm>
+            <Button type="primary" style={{ marginLeft: '10px' }} onClick={add}>加入购物车</Button>
+          </div>
+      }
+    </div>
+  )
+}
+
+BtnCell.propTypes = {
+  editable: PropTypes.bool,
+  buy: PropTypes.func,
+  sure: PropTypes.func,
+  add: PropTypes.func,
+  cancel: PropTypes.func,
+}
+
 const userList = ({
   shop: {
     shopList,
+    cacheList,
   },
   dispatch,
   form: {
@@ -19,6 +66,38 @@ const userList = ({
 }) => {
   const buy = (id) => {
     dispatch({ type: 'shop/buy', payload: { id } })
+  }
+
+  const opEdit = (key, bool) => {
+    const newData = [...shopList]
+    const target = newData.filter(item => key === item.key)[0]
+    if (target) {
+      if (!bool) {
+        Object.assign(target, cacheList.filter(item => key === item.key)[0])
+      }
+      target.editable = bool
+      dispatch({
+        type: 'shop/updateState',
+        payload: { shopList: newData },
+      })
+    }
+  }
+
+  const sure = (record) => {
+    let { id, number } = record
+    dispatch({ type: 'shop/cartAdd', payload: { number, productId: id } })
+  }
+
+  const handleChange = (value, key, column) => {
+    const newData = [...shopList]
+    const target = newData.filter(item => key === item.key)[0]
+    if (target) {
+      target[column] = value
+      dispatch({
+        type: 'shop/updateState',
+        payload: { shopList: newData },
+      })
+    }
   }
 
   const columns = [{
@@ -47,10 +126,31 @@ const userList = ({
     title: '数量',
     dataIndex: 'number',
     key: 'number',
+    width: 105,
+    render: (text, record) => {
+      return (
+        <NumberCell
+          editable={record.editable}
+          value={Number(text)}
+          onChange={value => handleChange(value, record.key, 'number')}
+          max={cacheList.filter(item => item.key === record.key)[0].number}
+        />
+      )
+    },
   }, {
     title: '操作',
-    render: (text, record) =>
-      <Popconfirm title="确定要购买？" onConfirm={buy.bind(this, record.id)}><Button>购买</Button></Popconfirm>,
+    width: 250,
+    render: (text, record) => {
+      return (
+        <BtnCell
+          editable={record.editable}
+          buy={buy.bind(this, record.id)}
+          add={opEdit.bind(this, record.id, true)}
+          cancel={opEdit.bind(this, record.id, false)}
+          sure={sure.bind(this, record)}
+        />
+      )
+    },
   }]
 
   const onChange = (list) => {
@@ -136,6 +236,7 @@ const HOC = WrappedComponent => {
 userList.propTypes = {
   shop: PropTypes.object,
   dispatch: PropTypes.func,
+  form: PropTypes.object,
 }
 
 const UserList = HOC(userList)

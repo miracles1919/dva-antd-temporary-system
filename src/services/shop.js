@@ -1,7 +1,10 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { prodShelves, prodList, deleteProd, updateProd, prodSearch } = api
+const {
+  prodShelves, prodList, deleteProd, updateProd,
+  prodSearch, addCart, carList, delCart, payCart,
+} = api
 
 export function shelves (data) {
   return request({
@@ -35,7 +38,6 @@ export function update (data) {
   })
 }
 
-
 export function search (data) {
   return request({
     url: prodSearch,
@@ -43,3 +45,33 @@ export function search (data) {
   })
 }
 
+export function cartAdd (data) {
+  return request({
+    url: addCart,
+    method: 'post',
+    data,
+  })
+}
+
+export function cartDel (data) {
+  return request({
+    url: delCart,
+    method: 'post',
+    data,
+  })
+}
+
+export function cartList (data) {
+  return request({
+    url: carList,
+    data,
+  })
+}
+
+export function cartPay (data) {
+  return request({
+    url: payCart,
+    method: 'post',
+    data,
+  })
+}
