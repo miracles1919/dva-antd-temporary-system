@@ -33,6 +33,18 @@ const menuTree = [{
     mpid: '3',
     bpid: '3',
     route: '/list2',
+  }, {
+    title: '购物车',
+    key: '3-4',
+    mpid: '3',
+    bpid: '3',
+    route: '/cart',
+  }, {
+    title: '我的订单',
+    key: '3-5',
+    mpid: '3',
+    bpid: '3',
+    route: '/order',
   }],
 }]
 

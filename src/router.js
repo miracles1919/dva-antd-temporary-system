@@ -40,8 +40,19 @@ const Routers = function ({ history, app }) {
       path: '/list2',
       models: () => [import('./models/shop')],
       component: () => import('./routes/shop/UserList'),
-    },
-  ]
+    }, {
+      path: '/cart',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/Cart'),
+    }, {
+      path: '/order',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/Order'),
+    }, {
+      path: '/order/:orderId',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/OrderDetail'),
+    }]
 
   return (
     <ConnectedRouter history={history}>

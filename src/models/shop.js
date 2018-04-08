@@ -1,6 +1,6 @@
 import modelExtend from 'dva-model-extend'
 import { imgUpload } from 'services/app'
-import { shelves, list, del, update, search } from 'services/shop'
+import { shelves, list, del, update, search, cartAdd, cartList, cartDel, cartPay } from 'services/shop'
 import { message } from 'antd'
 import { model } from './common'
 
@@ -11,6 +11,7 @@ export default modelExtend(model, {
     fileList: [],
     shopList: [],
     cacheList: [],
+    cartList: [],
   },
 
   effects: {
@@ -123,6 +124,54 @@ export default modelExtend(model, {
           user.balance -= target.price
           yield put({ type: 'app/updateState', payload: { user } })
         }
+      }
+    },
+
+    * cartAdd ({ payload }, { call }) {
+      let id = localStorage.getItem('id')
+      payload.userId = id
+      const { success, data } = yield call(cartAdd, payload)
+      if (success) {
+        message.success('加入购物车成功')
+        console.log(data)
+      }
+    },
+
+    * cartList (_, { call, put }) {
+      let id = localStorage.getItem('id')
+      const { success, data } = yield call(cartList, { userId: id })
+      if (success) {
+        data.forEach((item, index) => {
+          item.key = item.id
+          let { address, name, createTime, prodImg, price } = item.product
+          data[index] = { ...item, address, name, createTime, prodImg, price }
+        })
+        yield put({ type: 'updateState', payload: { cartList: data } })
+      }
+    },
+
+    * cartDel ({ payload }, { call, select }) {
+      let id = localStorage.getItem('id')
+      payload.userId = id
+      const { success } = yield call(cartDel, payload)
+      if (success) {
+        message.success('删除成功')
+        const { cartList } = yield select(_ => _.shop)
+        cartList.filter(item => item.id !== payload.shoppingcarId)
+      }
+    },
+
+    * pay ({ payload }, { call, put }) {
+      let id = localStorage.getItem('id')
+      payload.userId = id
+      const { success, data } = yield call(cartPay, payload)
+      if (success) {
+        message.success('支付成功')
+        console.log(data)
+        let { payMoney } = payload
+        let balance = localStorage.getItem('balance') - payMoney
+        yield put({ type: 'app/updateBalance', payload: { balance } })
+        localStorage.setItem('balance', balance)
       }
     },
 

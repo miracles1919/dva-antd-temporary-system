@@ -27,5 +27,9 @@ module.exports = {
     changepsw: `${API}/changepsw`,
     unCheckList: `${API}/unCheckList`,
     prodSearch: `${API}/prodSearch`,
+    addCart: `${API}/addShopCar`,
+    carList: `${API}/shoppingCarList`,
+    delCart: `${API}/deleteOneFromShoppingCar`,
+    payCart: `${API}/payOrder`,
   },
 }
