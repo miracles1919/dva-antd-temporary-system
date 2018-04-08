@@ -1,14 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Cascader, Popconfirm } from 'antd'
+import { Table, Button, Cascader, Popconfirm, Input, Form } from 'antd'
 import { connect } from 'dva'
 import city from 'utils/city'
+
+const FormItem = Form.Item
 
 const userList = ({
   shop: {
     shopList,
   },
   dispatch,
+  form: {
+    getFieldDecorator,
+    validateFields,
+    resetFields,
+  },
 }) => {
   const buy = (id) => {
     dispatch({ type: 'shop/buy', payload: { id } })
@@ -50,16 +57,55 @@ const userList = ({
     dispatch({ type: 'shop/search', payload: { address: list.join('/') } })
   }
 
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    validateFields((err, fieldsValue) => {
+      if (err) {
+        return
+      }
+      let values = {}
+      if (fieldsValue.address) {
+        values.address = fieldsValue.address.join('/')
+      }
+
+      if (fieldsValue.name) {
+        values.name = fieldsValue.name
+      }
+
+      dispatch({ type: 'shop/search', payload: values })
+    })
+  }
+
+  const clear = () => {
+    resetFields()
+    dispatch({ type: 'shop/search', payload: {} })
+  }
+
   return (
     <div>
       <div style={{ backgroundColor: '#f8f8f8' }}>
-        <Cascader
-          options={city}
-          size="large"
-          placeholder="请选择地区"
-          changeOnSelect
-          onChange={onChange}
-        />
+        <Form layout="inline" onSubmit={onSubmit}>
+          <FormItem>
+            {getFieldDecorator('address', {})(
+              <Cascader
+                options={city}
+                size="large"
+                placeholder="请选择地区"
+                changeOnSelect
+                onChange={onChange}
+              />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('name', {})(
+              <Input placeholder="请输入商品名称" />
+            )}
+          </FormItem>
+          <Button type="primary" htmlType="submit">搜索</Button>
+          <span style={{ cursor: 'pointer', marginLeft: '20px' }} onClick={clear}>清空</span>
+        </Form>
+
       </div>
       <Table
         dataSource={shopList}
@@ -94,4 +140,4 @@ userList.propTypes = {
 
 const UserList = HOC(userList)
 
-export default connect(({ shop }) => ({ shop }))(UserList)
+export default connect(({ shop }) => ({ shop }))(Form.create()(UserList))
