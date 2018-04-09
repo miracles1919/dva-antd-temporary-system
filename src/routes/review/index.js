@@ -36,6 +36,10 @@ class Review extends React.Component {
       colSpan: 0,
       render: url => <img src={url} alt="img" width={80} />,
     }, {
+      title: '身份证',
+      dataIndex: 'idCard',
+      key: 'idCard',
+    }, {
       title: '操作',
       render: (text, record) => (
         <div>

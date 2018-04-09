@@ -58,7 +58,11 @@ const Register = ({
     })
   }
 
-  const wrapStyle = register === 'user' ? null : { height: '502px', marginTop: '-240px' }
+  const loop = () => {
+    dispatch({ type: 'login/return' })
+  }
+
+  const wrapStyle = register === 'user' ? null : { height: '558px', marginTop: '-295px' }
 
   return (
     <div className={styles.form} style={wrapStyle}>
@@ -121,6 +125,19 @@ const Register = ({
             )}
           </InputGroup>
         </FormItem>
+        <FormItem>
+          {getFieldDecorator('idCard', {
+            rules: [{
+              required: true,
+              message: '请输入身份证',
+            }, {
+              pattern: /^\d{17}[\d|xX]$/,
+              message: '请输入正确的身份证',
+            }],
+          })(
+            <Input size="large" placeholder="请输入身份证" />
+          )}
+        </FormItem>
         {
           register === 'shop' ?
             <div>
@@ -133,6 +150,7 @@ const Register = ({
             确认
           </Button>
         </Row>
+        <span className={styles.return} onClick={loop} >返回登录</span>
 
       </form>
     </div>

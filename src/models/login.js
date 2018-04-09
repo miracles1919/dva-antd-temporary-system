@@ -55,6 +55,10 @@ export default {
       yield put(routerRedux.push('/register'))
     },
 
+    * return (_, { put }) {
+      yield put(routerRedux.push('/login'))
+    },
+
     * register ({ payload }, { select, call, put }) {
       const { register, fileList } = yield select(_ => _.login)
       if (register === 'user') {
