@@ -1,7 +1,11 @@
 import modelExtend from 'dva-model-extend'
 import { imgUpload } from 'services/app'
-import { shelves, list, del, update, search, cartAdd, cartList, cartDel, cartPay } from 'services/shop'
+import {
+  shelves, list, del, update, search, cartAdd,
+  cartList, cartDel, cartPay, orders, detail,
+} from 'services/shop'
 import { message } from 'antd'
+import pathToRegexp from 'path-to-regexp'
 import { model } from './common'
 
 export default modelExtend(model, {
@@ -12,6 +16,25 @@ export default modelExtend(model, {
     shopList: [],
     cacheList: [],
     cartList: [],
+    orderList: [],
+    orderDetail: {},
+  },
+
+  subscriptions: {
+    setup ({ dispatch, history }) {
+      history.listen(location => {
+        const { pathname } = location
+
+        if (pathname === '/order') {
+          dispatch({ type: 'orderList' })
+        } else {
+          const match = pathToRegexp('/order/:id').exec(pathname)
+          if (match) {
+            dispatch({ type: 'orderDetail', payload: { orderId: match[1] } })
+          }
+        }
+      })
+    },
   },
 
   effects: {
@@ -172,6 +195,27 @@ export default modelExtend(model, {
         let balance = localStorage.getItem('balance') - payMoney
         yield put({ type: 'app/updateBalance', payload: { balance } })
         localStorage.setItem('balance', balance)
+      }
+    },
+
+    * orderList (_, { call, put }) {
+      let id = localStorage.getItem('id')
+      const { success, data } = yield call(orders, { userId: id })
+      if (success) {
+        data.forEach(item => { item.key = item.id })
+        yield put({ type: 'updateState', payload: { orderList: data } })
+      }
+    },
+
+    * orderDetail ({ payload }, { call, put }) {
+      const { success, data } = yield call(detail, payload)
+      if (success) {
+        const { id, createTime, paymoney, number } = data.order
+        const orderDetail = {
+          ...data.product, otime: createTime, oid: id, paymoney, number, key: id,
+        }
+        console.log('orderDetail', orderDetail)
+        yield put({ type: 'updateState', payload: { orderDetail } })
       }
     },
 

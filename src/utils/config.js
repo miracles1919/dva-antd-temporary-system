@@ -31,5 +31,7 @@ module.exports = {
     carList: `${API}/shoppingCarList`,
     delCart: `${API}/deleteOneFromShoppingCar`,
     payCart: `${API}/payOrder`,
+    orderList: `${API}/listOrders`,
+    orderDetail: `${API}/orderDetail`,
   },
 }

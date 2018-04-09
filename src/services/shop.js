@@ -4,6 +4,7 @@ const { api } = config
 const {
   prodShelves, prodList, deleteProd, updateProd,
   prodSearch, addCart, carList, delCart, payCart,
+  orderList, orderDetail,
 } = api
 
 export function shelves (data) {
@@ -72,6 +73,20 @@ export function cartPay (data) {
   return request({
     url: payCart,
     method: 'post',
+    data,
+  })
+}
+
+export function orders (data) {
+  return request({
+    url: orderList,
+    data,
+  })
+}
+
+export function detail (data) {
+  return request({
+    url: orderDetail,
     data,
   })
 }
