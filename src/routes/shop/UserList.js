@@ -36,7 +36,7 @@ const BtnCell = ({ editable, buy, sure, add, cancel }) => {
           </div>
           :
           <div>
-            <Popconfirm title="确定要购买？" onConfirm={buy}><Button>购买</Button></Popconfirm>
+            <Button onClick={buy}>购买</Button>
             <Button type="primary" style={{ marginLeft: '10px' }} onClick={add}>加入购物车</Button>
           </div>
       }
@@ -56,6 +56,7 @@ const userList = ({
   shop: {
     shopList,
     cacheList,
+    shopType,
   },
   dispatch,
   form: {
@@ -64,11 +65,7 @@ const userList = ({
     resetFields,
   },
 }) => {
-  const buy = (id) => {
-    dispatch({ type: 'shop/buy', payload: { id } })
-  }
-
-  const opEdit = (key, bool) => {
+  const opEdit = (key, bool, shopType) => {
     const newData = [...shopList]
     const target = newData.filter(item => key === item.key)[0]
     if (target) {
@@ -78,14 +75,21 @@ const userList = ({
       target.editable = bool
       dispatch({
         type: 'shop/updateState',
-        payload: { shopList: newData },
+        payload: { shopList: newData, shopType },
       })
     }
   }
 
   const sure = (record) => {
-    let { id, number } = record
-    dispatch({ type: 'shop/cartAdd', payload: { number, productId: id } })
+    let { id, number, price } = record
+    console.log(shopType)
+    if (shopType === 'cart') {
+      dispatch({ type: 'shop/cartAdd', payload: { number, productId: id } })
+    } else if (shopType === 'buy') {
+      console.log(number)
+      console.log(price)
+      dispatch({ type: 'shop/buy', payload: { number, productId: id, payMoney: number * price } })
+    }
   }
 
   const handleChange = (value, key, column) => {
@@ -101,6 +105,10 @@ const userList = ({
   }
 
   const columns = [{
+    title: '溯源码',
+    dataIndex: 'id',
+    key: 'id',
+  }, {
     title: '商品名称',
     dataIndex: 'name',
     key: 'name',
@@ -144,9 +152,9 @@ const userList = ({
       return (
         <BtnCell
           editable={record.editable}
-          buy={buy.bind(this, record.id)}
-          add={opEdit.bind(this, record.id, true)}
-          cancel={opEdit.bind(this, record.id, false)}
+          buy={opEdit.bind(this, record.id, true, 'buy')}
+          add={opEdit.bind(this, record.id, true, 'cart')}
+          cancel={opEdit.bind(this, record.id, false, '')}
           sure={sure.bind(this, record)}
         />
       )
