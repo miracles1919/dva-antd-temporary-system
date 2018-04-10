@@ -52,6 +52,10 @@ const Routers = function ({ history, app }) {
       path: '/order/:orderId',
       models: () => [import('./models/shop')],
       component: () => import('./routes/shop/OrderDetail'),
+    }, {
+      path: '/search',
+      models: () => [import('./models/shop')],
+      component: () => import('./routes/shop/Search'),
     }]
 
   return (

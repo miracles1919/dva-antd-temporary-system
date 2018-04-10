@@ -31,7 +31,9 @@ module.exports = {
     carList: `${API}/shoppingCarList`,
     delCart: `${API}/deleteOneFromShoppingCar`,
     payCart: `${API}/payOrder`,
+    payDirector: `${API}/payDirector`,
     orderList: `${API}/listOrders`,
     orderDetail: `${API}/orderDetail`,
+    searchById: `${API}/searchByProdId`,
   },
 }

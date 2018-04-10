@@ -3,6 +3,7 @@ import { imgUpload } from 'services/app'
 import {
   shelves, list, del, update, search, cartAdd,
   cartList, cartDel, cartPay, orders, detail,
+  searchId, buy,
 } from 'services/shop'
 import { message } from 'antd'
 import pathToRegexp from 'path-to-regexp'
@@ -18,6 +19,8 @@ export default modelExtend(model, {
     cartList: [],
     orderList: [],
     orderDetail: {},
+    searchProd: {},
+    shopType: '',
   },
 
   subscriptions: {
@@ -132,31 +135,34 @@ export default modelExtend(model, {
       }
     },
 
-    * buy ({ payload: { id } }, { select, put }) {
-      const { shopList } = yield select(_ => _.shop)
-      const { user } = yield select(_ => _.app)
-      const target = shopList.filter(item => item.id === id)[0]
-      if (target) {
-        if (target.number === 0) {
-          message.error('商品数量不足')
-        } else if (target.price > user.balance) {
-          message.error('余额不足')
-        } else {
-          message.success('购买成功')
-          target.number -= 1
-          user.balance -= target.price
-          yield put({ type: 'app/updateState', payload: { user } })
-        }
+    * buy ({ payload }, { select, put, call }) {
+      let id = localStorage.getItem('id')
+      payload.userId = id
+      const { success } = yield call(buy, payload)
+      if (success) {
+        message.success('购买成功')
+        const { shopList, cacheList } = yield select(_ => _.shop)
+        const { user } = yield select(_ => _.app)
+        const target = shopList.filter(item => item.id === payload.productId)[0]
+        const targetCache = cacheList.filter(item => item.id === payload.productId)[0]
+        target.editable = false
+        target.number = targetCache.number - payload.number
+        user.balance -= target.price * target.number
+        yield put({ type: 'app/updateState', payload: { user } })
       }
     },
 
-    * cartAdd ({ payload }, { call }) {
+    * cartAdd ({ payload }, { call, select }) {
       let id = localStorage.getItem('id')
       payload.userId = id
-      const { success, data } = yield call(cartAdd, payload)
+      const { success } = yield call(cartAdd, payload)
       if (success) {
         message.success('加入购物车成功')
-        console.log(data)
+        const { shopList, cacheList } = yield select(_ => _.shop)
+        const target = shopList.filter(item => item.id === payload.productId)[0]
+        const targetCache = cacheList.filter(item => item.id === payload.productId)[0]
+        target.number = targetCache.number
+        target.editable = false
       }
     },
 
@@ -214,8 +220,17 @@ export default modelExtend(model, {
         const orderDetail = {
           ...data.product, otime: createTime, oid: id, paymoney, number, key: id,
         }
-        console.log('orderDetail', orderDetail)
         yield put({ type: 'updateState', payload: { orderDetail } })
+      }
+    },
+
+    * searchId ({ payload }, { call, put }) {
+      const { success, data } = yield call(searchId, payload)
+      if (success && data.seller) {
+        const searchProd = {
+          ...data.product, seller: data.seller.account, key: 1,
+        }
+        yield put({ type: 'updateState', payload: { searchProd } })
       }
     },
 

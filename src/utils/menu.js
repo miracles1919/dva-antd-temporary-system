@@ -51,6 +51,12 @@ const menuTree = [{
     mpid: '-1',
     bpid: '3-5',
     route: '/order/:id',
+  }, {
+    title: '溯源码查询',
+    key: '3-6',
+    mpid: '3',
+    bpid: '3',
+    route: '/search',
   }],
 }]
 

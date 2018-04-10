@@ -4,7 +4,7 @@ const { api } = config
 const {
   prodShelves, prodList, deleteProd, updateProd,
   prodSearch, addCart, carList, delCart, payCart,
-  orderList, orderDetail,
+  orderList, orderDetail, searchById, payDirector,
 } = api
 
 export function shelves (data) {
@@ -87,6 +87,21 @@ export function orders (data) {
 export function detail (data) {
   return request({
     url: orderDetail,
+    data,
+  })
+}
+
+export function searchId (data) {
+  return request({
+    url: searchById,
+    data,
+  })
+}
+
+export function buy (data) {
+  return request({
+    url: payDirector,
+    method: 'post',
     data,
   })
 }
