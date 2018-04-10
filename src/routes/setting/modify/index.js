@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Button, Row, Form, Input } from 'antd'
+import { Button, Form, Input } from 'antd'
 
 const FormItem = Form.Item
 
 const Modify = ({
   form: {
     getFieldDecorator,
-    validateFieldsAndScroll,
     getFieldValue,
     validateFields,
   },
