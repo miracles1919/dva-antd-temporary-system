@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Table } from 'antd'
+import { Link } from 'react-router-dom'
+
+import styles from './OrderDetail.less'
 
 
 const Detail = ({ shop: { orderDetail } }) => {
@@ -35,17 +38,26 @@ const Detail = ({ shop: { orderDetail } }) => {
     dataIndex: 'paymoney',
     key: 'paymoney',
   }]
-  return (
-    <div>
+
+  const header = () => {
+    return (
       <div>
         {orderDetail.otime && orderDetail.otime.split(' ')[0]}
-        订单号：{orderDetail.oid}
+        <span style={{ marginLeft: '20px' }}>订单号：{orderDetail.oid}</span>
+        <Link className={styles.return} to="/order"><span>返回</span></Link>
       </div>
+    )
+  }
+  return (
+    <div>
+
       {
         orderDetail.key ?
           <Table
             dataSource={[orderDetail]}
             columns={columns}
+            title={header}
+            bordered
           /> : null
       }
     </div>
