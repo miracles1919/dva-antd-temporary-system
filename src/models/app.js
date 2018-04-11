@@ -64,7 +64,7 @@ export default {
       if (type === 'admin') {
         authority = ['2']
       } else if (type === 'shop') {
-        authority = ['1', '1-1', '3', '3-1', '3-2']
+        authority = ['1', '1-1', '3', '3-1', '3-2', '3-5', '3-5-1']
       } else if (type === 'user') {
         authority = ['1', '1-1', '3', '3-3', '3-4', '3-5', '3-5-1', '3-6']
       }
@@ -93,6 +93,7 @@ export default {
       localStorage.removeItem('type')
       localStorage.removeItem('username')
       localStorage.removeItem('balance')
+      yield put({ type: 'login/updateState', payload: { loginType: 'shop' } })
       yield put(routerRedux.push({
         pathname: '/login',
       }))
