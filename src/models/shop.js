@@ -3,7 +3,7 @@ import { imgUpload } from 'services/app'
 import {
   shelves, list, del, update, search, cartAdd,
   cartList, cartDel, cartPay, orders, detail,
-  searchId, buy,
+  searchId, buy, sellOrders,
 } from 'services/shop'
 import { message } from 'antd'
 import pathToRegexp from 'path-to-regexp'
@@ -206,7 +206,17 @@ export default modelExtend(model, {
 
     * orderList (_, { call, put }) {
       let id = localStorage.getItem('id')
-      const { success, data } = yield call(orders, { userId: id })
+      let type = localStorage.getItem('type')
+      let params = {}
+      let fun
+      if (type === 'user') {
+        params.userId = id
+        fun = orders
+      } else if (type === 'shop') {
+        params.sellId = id
+        fun = sellOrders
+      }
+      const { success, data } = yield call(fun, params)
       if (success) {
         data.forEach(item => { item.key = item.id })
         yield put({ type: 'updateState', payload: { orderList: data } })

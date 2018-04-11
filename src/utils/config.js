@@ -35,5 +35,6 @@ module.exports = {
     orderList: `${API}/listOrders`,
     orderDetail: `${API}/orderDetail`,
     searchById: `${API}/searchByProdId`,
+    sellOrderList: `${API}/listOrdersForSeller`,
   },
 }

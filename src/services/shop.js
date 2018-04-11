@@ -5,6 +5,7 @@ const {
   prodShelves, prodList, deleteProd, updateProd,
   prodSearch, addCart, carList, delCart, payCart,
   orderList, orderDetail, searchById, payDirector,
+  sellOrderList,
 } = api
 
 export function shelves (data) {
@@ -80,6 +81,13 @@ export function cartPay (data) {
 export function orders (data) {
   return request({
     url: orderList,
+    data,
+  })
+}
+
+export function sellOrders (data) {
+  return request({
+    url: sellOrderList,
     data,
   })
 }
