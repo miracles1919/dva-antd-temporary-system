@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Button, Cascader, Popconfirm, Input, Form, InputNumber } from 'antd'
+import { Table, Button, Cascader, Input, Form, InputNumber } from 'antd'
 import { connect } from 'dva'
 import city from 'utils/city'
 
@@ -82,12 +82,9 @@ const userList = ({
 
   const sure = (record) => {
     let { id, number, price } = record
-    console.log(shopType)
     if (shopType === 'cart') {
       dispatch({ type: 'shop/cartAdd', payload: { number, productId: id } })
     } else if (shopType === 'buy') {
-      console.log(number)
-      console.log(price)
       dispatch({ type: 'shop/buy', payload: { number, productId: id, payMoney: number * price } })
     }
   }
