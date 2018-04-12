@@ -82,6 +82,7 @@ export default {
           const { success } = yield call(shopRegister, params)
           if (success) {
             message.success('注册成功，请等待管理员审核')
+            yield put({ type: 'updateState', payload: { fileList: [] } })
             yield put(routerRedux.push('/login'))
           }
         } else {

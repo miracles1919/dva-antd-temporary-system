@@ -24,7 +24,7 @@ const Add = ({
     fileList,
   },
 }) => {
-  const { getFieldDecorator } = form
+  const { getFieldDecorator, resetFields, setFields } = form
 
   const formItemLayout = {
     labelCol: { span: 6, offset: 0 },
@@ -41,11 +41,18 @@ const Add = ({
         return
       }
       dispatch({ type: 'shop/shelves', payload: fieldsValue })
+      resetFields()
     })
   }
 
   const uploadImg = ({ file }) => {
     dispatch({ type: 'shop/upload', payload: { file } })
+  }
+
+  const onRemove = (file) => {
+    const newFileList = fileList.filter(item => item.uid !== file.uid)
+    dispatch({ type: 'shop/updateState', payload: { fileList: newFileList } })
+    setFields({ img: { value: '' } })
   }
 
   return (
@@ -159,6 +166,7 @@ const Add = ({
                   listType="picture-card"
                   customRequest={uploadImg}
                   fileList={fileList}
+                  onRemove={onRemove}
                 >
                   {fileList.length > 0 ? null
                     : <UploadButton />

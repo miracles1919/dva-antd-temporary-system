@@ -10,6 +10,12 @@ class PicturesWall extends React.Component {
     previewImage: '',
   }
 
+  onRemove = (file) => {
+    let { fileList, dispatch } = this.props
+    fileList = fileList.filter(item => item.uid !== file.uid)
+    dispatch({ type: 'login/updateState', payload: { fileList } })
+  }
+
   handleCancel = () => this.setState({ previewVisible: false })
 
   handlePreview = (file) => {
@@ -51,6 +57,7 @@ class PicturesWall extends React.Component {
           fileList={fileList}
           onPreview={this.handlePreview}
           customRequest={this.upload}
+          onRemove={this.onRemove}
         >
           {fileList.length >= 3 ? null : uploadButton}
         </Upload>

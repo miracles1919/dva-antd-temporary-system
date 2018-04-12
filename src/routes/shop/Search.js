@@ -15,7 +15,6 @@ const Search = ({
   },
   dispatch,
 }) => {
-  console.log(searchProd)
   const columns = [{
     title: '溯源码',
     dataIndex: 'id',

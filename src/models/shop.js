@@ -30,6 +30,8 @@ export default modelExtend(model, {
 
         if (pathname === '/order') {
           dispatch({ type: 'orderList' })
+        } else if (pathname === '/search') {
+          dispatch({ type: 'updateState', payload: { searchProd: {} } })
         } else {
           const match = pathToRegexp('/order/:id').exec(pathname)
           if (match) {
@@ -59,7 +61,7 @@ export default modelExtend(model, {
 
     * shelves ({
       payload: { name, location, number, price, createTime },
-    }, { call, select }) {
+    }, { call, select, put }) {
       const { fileList } = yield select(_ => _.shop)
       const id = localStorage.getItem('id')
       const params = {
@@ -74,6 +76,7 @@ export default modelExtend(model, {
       const { success } = yield call(shelves, params)
       if (success) {
         message.success('上架成功')
+        yield put({ type: 'updateState', payload: { fileList: [] } })
       }
     },
 

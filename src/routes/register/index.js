@@ -27,7 +27,6 @@ const Register = ({
       if (errors) {
         return
       }
-      console.log(values)
       dispatch({
         type: 'login/register',
         payload: values,
